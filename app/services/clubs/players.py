@@ -56,6 +56,7 @@ class TransfermarktClubPlayers(TransfermarktBase):
         players_ids = [extract_from_url(url) for url in self.get_list_by_xpath(Clubs.Players.URLS)]
         players_names = self.get_list_by_xpath(Clubs.Players.NAMES)
         players_positions = self.get_list_by_xpath(Clubs.Players.POSITIONS)
+        players_images = self.get_list_by_xpath(Clubs.Players.IMAGE) or ["None"] * len(players_ids)
         players_dobs = [
             safe_regex(dob_age, REGEX_DOB, "dob") for dob_age in self.get_list_by_xpath(Clubs.Players.DOB_AGE)
         ]
@@ -87,6 +88,7 @@ class TransfermarktClubPlayers(TransfermarktBase):
                 "id": idx,
                 "name": name,
                 "position": position,
+                "image": image,
                 "dateOfBirth": dob,
                 "age": age,
                 "nationality": nationality,
@@ -100,10 +102,11 @@ class TransfermarktClubPlayers(TransfermarktBase):
                 "marketValue": market_value,
                 "status": status,
             }
-            for idx, name, position, dob, age, nationality, current_club, height, foot, joined_on, joined, signed_from, contract, market_value, status, in zip(  # noqa: E501
+            for idx, name, position, image, dob, age, nationality, current_club, height, foot, joined_on, joined, signed_from, contract, market_value, status, in zip(  # noqa: E501
                 players_ids,
                 players_names,
                 players_positions,
+                players_images,
                 players_dobs,
                 players_ages,
                 players_nationalities,

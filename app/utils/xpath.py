@@ -153,6 +153,7 @@ class Clubs:
         PAGE_INFOS = "//td[@class='posrela']"
         NAMES = "//td[@class='posrela']//a//text()"
         URLS = "//td[@class='hauptlink']//@href"
+        IMAGE = ".//img[contains(@class, 'bilderrahmen-fixed')]//@data-src"
         POSITIONS = "//td[@class='posrela']//tr[2]//text()"
         DOB_AGE = "//div[@id='yw1']//td[3]//text()"
         NATIONALITIES = ".//img//@title"
