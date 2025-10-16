@@ -6,5 +6,9 @@ class Settings(BaseSettings):
     RATE_LIMITING_ENABLE: bool = False
     RATE_LIMITING_FREQUENCY: str = "2/3seconds"
 
+    # CORS settings
+    CORS_ORIGINS: list[str] = ["*"]  # Default to allow all origins
+    
+
 
 settings = Settings()
