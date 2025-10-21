@@ -56,7 +56,7 @@ class TransfermarktClubPlayers(TransfermarktBase):
         players_ids = [extract_from_url(url) for url in self.get_list_by_xpath(Clubs.Players.URLS)]
         players_names = self.get_list_by_xpath(Clubs.Players.NAMES)
         players_positions = self.get_list_by_xpath(Clubs.Players.POSITIONS)
-        players_images = self.get_list_by_xpath(Clubs.Players.IMAGE) or ["None"] * len(players_ids)
+        players_images = self.get_list_by_xpath(Clubs.Players.IMAGE) or [None] * len(players_ids)
         players_dobs = [
             safe_regex(dob_age, REGEX_DOB, "dob") for dob_age in self.get_list_by_xpath(Clubs.Players.DOB_AGE)
         ]
