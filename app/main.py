@@ -7,6 +7,10 @@ from slowapi.middleware import SlowAPIMiddleware
 from slowapi.util import get_remote_address
 from starlette.responses import RedirectResponse
 
+from fastapi_cache import FastAPICache
+from fastapi_cache.backends.redis import RedisBackend
+import redis.asyncio as redis_async
+
 from app.api.api import api_router
 from app.settings import settings
 
@@ -27,6 +31,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.include_router(api_router)
+
+
+@app.on_event("startup")
+async def on_startup():
+    # init redis client and fastapi cache
+    redis_client = redis_async.from_url(settings.REDIS_URL, encoding="utf8", decode_responses=True)
+    FastAPICache.init(RedisBackend(redis_client), prefix="tm")
+    app.state.redis = redis_client
+
+
+@app.on_event("shutdown")
+async def on_shutdown():
+    redis_client = getattr(app.state, "redis", None)
+    if redis_client:
+        await redis_client.close()
 
 
 @app.get("/", include_in_schema=False)

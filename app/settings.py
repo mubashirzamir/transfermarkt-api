@@ -8,7 +8,9 @@ class Settings(BaseSettings):
 
     # CORS settings
     CORS_ORIGINS: list[str] = ["*"]  # Default to allow all origins
-    
+    # Redis / cache settings
+    REDIS_URL: str = "redis://localhost:6379/0"
+    CACHE_EXPIRE: int = 60  # seconds
 
 
 settings = Settings()

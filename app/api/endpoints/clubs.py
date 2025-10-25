@@ -1,11 +1,14 @@
 from typing import Optional
 
 from fastapi import APIRouter
+from fastapi_cache.decorator import cache
 
 from app.schemas import clubs as schemas
 from app.services.clubs.players import TransfermarktClubPlayers
 from app.services.clubs.profile import TransfermarktClubProfile
 from app.services.clubs.search import TransfermarktClubSearch
+from app.settings import settings
+
 
 router = APIRouter()
 
@@ -25,6 +28,7 @@ def get_club_profile(club_id: str) -> dict:
 
 
 @router.get("/{club_id}/players", response_model=schemas.ClubPlayers, response_model_exclude_defaults=True)
+@cache(expire=settings.CACHE_EXPIRE)
 def get_club_players(club_id: str, season_id: Optional[str] = None) -> dict:
     tfmkt = TransfermarktClubPlayers(club_id=club_id, season_id=season_id)
     club_players = tfmkt.get_club_players()

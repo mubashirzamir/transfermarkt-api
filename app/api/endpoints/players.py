@@ -11,6 +11,8 @@ from app.services.players.profile import TransfermarktPlayerProfile
 from app.services.players.search import TransfermarktPlayerSearch
 from app.services.players.stats import TransfermarktPlayerStats
 from app.services.players.transfers import TransfermarktPlayerTransfers
+from app.settings import settings
+from fastapi_cache.decorator import cache
 
 router = APIRouter()
 
@@ -23,6 +25,7 @@ def search_players(player_name: str, page_number: Optional[int] = 1):
 
 
 @router.get("/{player_id}/profile", response_model=schemas.PlayerProfile, response_model_exclude_none=True)
+@cache(expire=settings.CACHE_EXPIRE)
 def get_player_profile(player_id: str):
     tfmkt = TransfermarktPlayerProfile(player_id=player_id)
     player_info = tfmkt.get_player_profile()
@@ -37,6 +40,7 @@ def get_player_market_value(player_id: str):
 
 
 @router.get("/{player_id}/transfers", response_model=schemas.PlayerTransfers, response_model_exclude_none=True)
+@cache(expire=settings.CACHE_EXPIRE)
 def get_player_transfers(player_id: str):
     tfmkt = TransfermarktPlayerTransfers(player_id=player_id)
     player_market_value = tfmkt.get_player_transfers()
